@@ -8,7 +8,7 @@ from gino import Gino
 from aio_pika import connect, Message, DeliveryMode, ExchangeType
 
 db = Gino()
-
+data_source = input()
 
 class MessageDb(db.Model):
     __tablename__ = 'messages'
@@ -30,9 +30,7 @@ routes = web.RouteTableDef()
 
 
 async def main():
-    username = os.getenv('process.env.POSTGRES_USER')
-    print(username)
-    await db.set_bind('postgresql://postgres/radist_db')
+    await db.set_bind(data_source)
     # Create tables
     await db.gino.create_all()
 

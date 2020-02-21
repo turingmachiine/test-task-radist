@@ -21,7 +21,7 @@ async def on_message(message: IncomingMessage):
         temp_str = message.body.decode().replace("\'", "\"")
         json_message = json.loads(temp_str)
         # Creating database connection
-        await db.set_bind('postgresql://postgres/radist_db')
+        await db.set_bind(data_source)
         # Create tables
         await db.gino.create_all()
 
@@ -53,6 +53,7 @@ async def main(binding_key):
     await queue.consume(on_message)
 
 if __name__ == "__main__":
+    data_source = input()
     key = input()
     loop = asyncio.get_event_loop()
     loop.create_task(main(key))
