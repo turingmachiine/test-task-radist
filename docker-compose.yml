@@ -1,0 +1,27 @@
+version: "3"
+
+services:
+  rabbitmq:
+    restart: always
+    image: rabbitmq:management
+    hostname: rabbitmq
+    network_mode: host
+  postgres:
+    restart: always
+    image: postgres:10.6-alpine
+    ports:
+      - 5434:5432
+    env_file:
+      - vars.env
+    volumes:
+      - ./data/postgres:/var/lib/postgresql/data
+  web:
+      build: .
+      ports:
+        - "8000:8000"
+      volumes:
+        - .:/code
+      links:
+        - postgres
+      env_file:
+        - vars.env
